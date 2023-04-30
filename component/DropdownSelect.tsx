@@ -2,31 +2,31 @@ import { useState, useEffect } from "react";
 
 interface Props {
     bindLabel: string,
-    dataSet: [],
-    selected?: [],
+    dataSet: any[],
+    selected?: any[],
     onChange: any,
     placeholder: string,
     noItemText: string,
-    id?:string,
-    display?:boolean,
+    id?: string,
+    display?: boolean,
 }
 export function DropdownSelect(
-    { dataSet, bindLabel, onChange, placeholder, noItemText, selected, id, display }: Props) {
+    { dataSet, bindLabel, onChange, placeholder, noItemText, selected, id, display = false }: Props) {
     const [query, setQuery] = useState<string>("");
-    const [selectedItems, setSelectedItems] = useState<[]>(selected || []);
-    const [optionItems, setOptionItems] = useState<[]>(
-    dataSet.filter(item => {
-        return !selected?.some(selectedItem => JSON.stringify(selectedItem) === JSON.stringify(item))
-    })
+    const [selectedItems, setSelectedItems] = useState<any[]>(selected || []);
+    const [optionItems, setOptionItems] = useState<any[]>(
+        dataSet.filter((item: any) => {
+            return !selected?.some(selectedItem => JSON.stringify(selectedItem) === JSON.stringify(item))
+        }) || []
     );
     const [showOptions, setShowOptions] = useState<boolean>(display);
 
     function handleFilter(data: any, query: string) {
         const newQuery = query.toLowerCase();
-        return data.filter((item) => item[bindLabel].toLowerCase().includes(newQuery));
+        return data.filter((item: any) => item[bindLabel].toLowerCase().includes(newQuery));
     }
 
-    function handleRemoveItem(state: any, dataSet: [], item: any) {
+    function handleRemoveItem(state: any, dataSet: any[], item: any) {
         const newDateSet = dataSet.filter((existing: any) => existing !== item);
         const sorted = newDateSet.sort((a: any, b: any) => a.id - b.id);
         const newOptionItems: any = [...optionItems, item].sort((a: any, b: any) => a.id - b.id)
@@ -35,7 +35,7 @@ export function DropdownSelect(
         onChange(sorted);
     }
 
-    function handleSelectItem(state: any, dataSet: [], item: any) {
+    function handleSelectItem(state: any, dataSet: any[], item: any) {
         const selected = [...dataSet, item].sort((a: any, b: any) => a.id - b.id)
         const newOptionItems: any = optionItems.filter(existing => existing !== item).sort((a: any, b: any) => a.id - b.id);
         setOptionItems(newOptionItems);
